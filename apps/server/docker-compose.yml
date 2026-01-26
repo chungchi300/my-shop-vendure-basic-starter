@@ -5,35 +5,47 @@
 # ports section in the services block. Please don't forget to update the ports in the .env file as well.
 
 services:
-    postgres_db:
-        image: postgres:16-alpine
-        volumes:
-            - postgres_db_data:/var/lib/postgresql/data
-        ports:
-            - "6543:5432"
+    # postgres_db:
+    #     image: postgres:16-alpine
+    #     volumes:
+    #         - postgres_db_data:/var/lib/postgresql/data
+    #     ports:
+    #         - "6543:5432"
+    #     environment:
+    #         POSTGRES_DB: my-shop-vendure
+    #         POSTGRES_USER: root
+    #         POSTGRES_PASSWORD: dockerPassword
+    #     labels:
+    #         - "io.vendure.create.name=my-vendure-shop-mariadb"
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
         environment:
-            POSTGRES_DB: my-shop-vendure
-            POSTGRES_USER: root
-            POSTGRES_PASSWORD: dockerPassword
-        labels:
-            - "io.vendure.create.name=my-vendure-shop-mariadb"
-
-    mysql_db:
-        image: mysql:8
-        volumes:
-            - mysql_db_data:/var/lib/mysql
-        environment:
-            MYSQL_ROOT_PASSWORD: 'ROOT'
-            MYSQL_DATABASE: my-shop-vendure
+            PMA_ARBITRARY: 1
             MYSQL_USER: root
-            MYSQL_PASSWORD: dockerPassword
+            MYSQL_ROOT_PASSWORD: dockerPassword
         ports:
-            - "4306:3306"
-        labels:
-            - "io.vendure.create.name=my-vendure-shop-mariadb"
+            - '8000:80'
+        links:
+        # for mysql container
+            - 'mariadb_db:db'
+        volumes:
+            - ./docker-config/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+    # mysql_db:
+    #     image: mysql:8
+    #     volumes:
+    #         - mysql_db_data:/var/lib/mysql
+    #     environment:
+    #         MYSQL_ROOT_PASSWORD: 'ROOT'
+    #         MYSQL_DATABASE: my-shop-vendure
+    #         MYSQL_USER: root
+    #         MYSQL_PASSWORD: dockerPassword
+    #     ports:
+    #         - "4306:3306"
+    #     labels:
+    #         - "io.vendure.create.name=my-vendure-shop-mariadb"
 
     mariadb_db:
-        image: mariadb:10
+        image: mariadb:10.4
         volumes:
             - mariadb_db_data:/var/lib/mysql
         environment:
@@ -41,10 +53,15 @@ services:
             MARIADB_DATABASE: my-shop-vendure
             MARIADB_USER: root
             MARIADB_PASSWORD: dockerPassword
-        ports:
-            - "3306:3306"
         labels:
             - "io.vendure.create.name=my-vendure-shop-mariadb"
+        command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max_connections=20000 --max_allowed_packet=1000M
+        environment:
+            - MYSQL_ROOT_PASSWORD=dockerPassword
+            - TZ=Asia/Hong_Kong
+        ports:
+            - '3307:3306'
+
 
     # RECOMMENDED (especially for production)
     # Want to use our BullMQ with Redis instead of our default database job queue?
@@ -79,7 +96,7 @@ services:
         image: docker.elastic.co/elasticsearch/elasticsearch:7.1.1
         environment:
             discovery.type: single-node
-            bootstrap.memory_lock: true
+            bootstrap.memory_lock: "true"
             ES_JAVA_OPTS: -Xms512m -Xmx512m
         volumes:
             - elasticsearch_data:/usr/share/elasticsearch/data

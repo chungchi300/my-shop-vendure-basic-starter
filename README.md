@@ -1,3 +1,7 @@
+# Environment
+
+node v22.22.0
+
 # my-vendure-shop-mariadb
 
 A full-stack e-commerce application built with [Vendure](https://www.vendure.io/) and [Next.js](https://nextjs.org/).
