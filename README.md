@@ -22,6 +22,9 @@ my-vendure-shop-mariadb/
 
 ### Development
 
+cd apps/server/
+docker-compose up
+
 Start both the server and storefront in development mode:
 
 ```bash
@@ -40,10 +43,11 @@ npm run dev:storefront
 
 ### Access Points
 
-- **Vendure Dashboard**: http://localhost:3000/dashboard
-- **Shop GraphQL API**: http://localhost:3000/shop-api
-- **Admin GraphQL API**: http://localhost:3000/admin-api
-- **Storefront**: http://localhost:3001
+- **Vendure Dashboard(GUI)**: http://localhost:3000/dashboard
+- **Storefront(GUI)**: http://localhost:3001
+- **GrapthQL (GUI)**: http://localhost:3000/graphiql/shop
+- **Shop GraphQL API End Point** : http://localhost:3000/shop-api
+- **Admin GraphQL Endpont API**: http://localhost:3000/admin-api
 
 ### Admin Credentials
 
