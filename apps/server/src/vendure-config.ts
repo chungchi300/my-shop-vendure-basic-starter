@@ -2,7 +2,7 @@ import {
     dummyPaymentHandler,
     DefaultJobQueuePlugin,
     DefaultSchedulerPlugin,
-    DefaultSearchPlugin,
+    DefaultSearchPlugin, ConfigService,
     VendureConfig,
 } from '@vendure/core';
 import { defaultEmailHandlers, EmailPlugin, FileBasedTemplateLoader } from '@vendure/email-plugin';
@@ -15,6 +15,18 @@ import path from 'path';
 const IS_DEV = process.env.APP_ENV === 'dev';
 const serverPort = +process.env.PORT || 3000;
 
+import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Request, Response, NextFunction } from 'express';
+@Injectable()
+class MyNestMiddleware implements NestMiddleware {
+    // Dependencies can be injected via the constructor
+    constructor(private configService: ConfigService) { }
+
+    use(req: Request, res: Response, next: NextFunction) {
+        console.log(`NestJS middleware: current check live refresh port is ${this.configService.apiOptions.port}`);
+        next();
+    }
+}
 export const config: VendureConfig = {
     apiOptions: {
         port: serverPort,
@@ -28,6 +40,12 @@ export const config: VendureConfig = {
             adminApiDebug: true,
             shopApiDebug: true,
         } : {}),
+        middleware: [
+            {
+                route: 'shop-api',
+                handler: MyNestMiddleware,
+            }
+        ],
     },
     authOptions: {
         tokenMethod: ['bearer', 'cookie'],
@@ -36,7 +54,7 @@ export const config: VendureConfig = {
             password: process.env.SUPERADMIN_PASSWORD,
         },
         cookieOptions: {
-          secret: process.env.COOKIE_SECRET,
+            secret: process.env.COOKIE_SECRET,
         },
     },
     dbConnectionOptions: {
