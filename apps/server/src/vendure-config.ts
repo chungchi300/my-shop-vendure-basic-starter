@@ -23,7 +23,7 @@ class MyNestMiddleware implements NestMiddleware {
     constructor(private configService: ConfigService) { }
 
     use(req: Request, res: Response, next: NextFunction) {
-        console.log(`NestJS middleware: current check live refresh port is ${this.configService.apiOptions.port}`);
+        console.log(`NestJS live reload done middleware: current check live refresh port is ${this.configService.apiOptions.port}`);
         next();
     }
 }
