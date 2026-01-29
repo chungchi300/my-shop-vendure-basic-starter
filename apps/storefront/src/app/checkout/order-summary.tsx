@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { OrderLine } from './types';
-import { useCheckout } from './checkout-provider';
-import { Price } from '@/components/commerce/price';
+import Image from "next/image";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { OrderLine } from "./types";
+import { useCheckout } from "./checkout-provider";
+import { Price } from "@/components/commerce/price";
 
 export default function OrderSummary() {
   const { order } = useCheckout();
   return (
     <Card className="sticky top-4">
       <CardHeader>
-        <CardTitle>Order Summary</CardTitle>
+        <CardTitle>訂單摘要</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-3">
@@ -33,7 +33,8 @@ export default function OrderSummary() {
                 <p className="text-sm font-medium line-clamp-2">
                   {line.productVariant.product.name}
                 </p>
-                {line.productVariant.name !== line.productVariant.product.name && (
+                {line.productVariant.name !==
+                  line.productVariant.product.name && (
                   <p className="text-xs text-muted-foreground">
                     {line.productVariant.name}
                   </p>
@@ -43,7 +44,10 @@ export default function OrderSummary() {
                 </p>
               </div>
               <div className="text-sm font-medium">
-                <Price value={line.linePriceWithTax} currencyCode={order.currencyCode} />
+                <Price
+                  value={line.linePriceWithTax}
+                  currencyCode={order.currencyCode}
+                />
               </div>
             </div>
           ))}
@@ -53,19 +57,28 @@ export default function OrderSummary() {
 
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Subtotal</span>
+            <span className="text-muted-foreground">總計</span>
             <span>
-              <Price value={order.subTotalWithTax} currencyCode={order.currencyCode} />
+              <Price
+                value={order.subTotalWithTax}
+                currencyCode={order.currencyCode}
+              />
             </span>
           </div>
 
           {order.discounts && order.discounts.length > 0 && (
             <>
               {order.discounts.map((discount, index: number) => (
-                <div key={index} className="flex justify-between text-sm text-green-600">
+                <div
+                  key={index}
+                  className="flex justify-between text-sm text-green-600"
+                >
                   <span>{discount.description}</span>
                   <span>
-                    <Price value={discount.amountWithTax} currencyCode={order.currencyCode} />
+                    <Price
+                      value={discount.amountWithTax}
+                      currencyCode={order.currencyCode}
+                    />
                   </span>
                 </div>
               ))}
@@ -73,11 +86,16 @@ export default function OrderSummary() {
           )}
 
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Shipping</span>
+            <span className="text-muted-foreground">運費</span>
             <span>
-              {order.shippingWithTax > 0
-                ? <Price value={order.shippingWithTax} currencyCode={order.currencyCode} />
-                : 'To be calculated'}
+              {order.shippingWithTax > 0 ? (
+                <Price
+                  value={order.shippingWithTax}
+                  currencyCode={order.currencyCode}
+                />
+              ) : (
+                "To be calculated"
+              )}
             </span>
           </div>
         </div>
@@ -85,9 +103,12 @@ export default function OrderSummary() {
         <Separator />
 
         <div className="flex justify-between font-bold text-lg">
-          <span>Total</span>
+          <span>總計</span>
           <span>
-            <Price value={order.totalWithTax} currencyCode={order.currencyCode} />
+            <Price
+              value={order.totalWithTax}
+              currencyCode={order.currencyCode}
+            />
           </span>
         </div>
       </CardContent>

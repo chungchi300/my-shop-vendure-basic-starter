@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
-import { Card } from '@/components/ui/card';
-import { Loader2, Truck } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useCheckout } from '../checkout-provider';
-import { setShippingMethod as setShippingMethodAction } from '../actions';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Card } from "@/components/ui/card";
+import { Loader2, Truck } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useCheckout } from "../checkout-provider";
+import { setShippingMethod as setShippingMethodAction } from "../actions";
 
 interface DeliveryStepProps {
   onComplete: () => void;
@@ -17,14 +17,16 @@ interface DeliveryStepProps {
 export default function DeliveryStep({ onComplete }: DeliveryStepProps) {
   const router = useRouter();
   const { shippingMethods, order } = useCheckout();
-  const [selectedMethodId, setSelectedMethodId] = useState<string | null>(() => {
-    // If order already has a shipping method selected, pre-select it
-    if (order.shippingLines && order.shippingLines.length > 0) {
-      return order.shippingLines[0].shippingMethod.id;
-    }
-    // Otherwise default to first method if there's only one
-    return shippingMethods.length === 1 ? shippingMethods[0].id : null;
-  });
+  const [selectedMethodId, setSelectedMethodId] = useState<string | null>(
+    () => {
+      // If order already has a shipping method selected, pre-select it
+      if (order.shippingLines && order.shippingLines.length > 0) {
+        return order.shippingLines[0].shippingMethod.id;
+      }
+      // Otherwise default to first method if there's only one
+      return shippingMethods.length === 1 ? shippingMethods[0].id : null;
+    },
+  );
   const [submitting, setSubmitting] = useState(false);
 
   const handleContinue = async () => {
@@ -36,7 +38,7 @@ export default function DeliveryStep({ onComplete }: DeliveryStepProps) {
       router.refresh();
       onComplete();
     } catch (error) {
-      console.error('Error setting shipping method:', error);
+      console.error("Error setting shipping method:", error);
     } finally {
       setSubmitting(false);
     }
@@ -45,16 +47,21 @@ export default function DeliveryStep({ onComplete }: DeliveryStepProps) {
   if (shippingMethods.length === 0) {
     return (
       <div className="text-center py-8">
-        <p className="text-muted-foreground">No shipping methods available. Please check your address.</p>
+        <p className="text-muted-foreground">
+          沒有可用的運送方式。請檢查您的地址。
+        </p>
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      <h3 className="font-semibold">Select shipping method</h3>
+      <h3 className="font-semibold">選擇運送方式</h3>
 
-      <RadioGroup value={selectedMethodId || ''} onValueChange={setSelectedMethodId}>
+      <RadioGroup
+        value={selectedMethodId || ""}
+        onValueChange={setSelectedMethodId}
+      >
         {shippingMethods.map((method) => (
           <Label key={method.id} htmlFor={method.id} className="cursor-pointer">
             <Card className="p-4">
@@ -74,10 +81,10 @@ export default function DeliveryStep({ onComplete }: DeliveryStepProps) {
                 <div className="text-right flex-shrink-0">
                   <p className="font-semibold">
                     {method.priceWithTax === 0
-                      ? 'FREE'
-                      : (method.priceWithTax / 100).toLocaleString('en-US', {
-                          style: 'currency',
-                          currency: 'USD',
+                      ? "免費"
+                      : (method.priceWithTax / 100).toLocaleString("zh-TW", {
+                          style: "currency",
+                          currency: "HKD",
                         })}
                   </p>
                 </div>
