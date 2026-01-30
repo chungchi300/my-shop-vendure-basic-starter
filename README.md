@@ -72,6 +72,5 @@ npm run start
 
 ## Learn More
 
-- [Vendure Documentation](https://docs.vendure.io)
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Vendure Discord Community](https://vendure.io/community)
+https://blog.csdn.net/gitblog_01069/article/details/148487209
+A VendurePlugin is actually an enhanced version of a NestJS Module, and supports all the metadata properties that NestJS modules support:

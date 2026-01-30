@@ -205,7 +205,7 @@ export function RegistrationForm({ redirectTo }: RegistrationFormProps) {
             )}
 
             <Button type="submit" className="w-full" disabled={isPending}>
-              {isPending ? "Creating account..." : "建立帳號"}
+              {isPending ? "建立中.." : "建立帳號"}
             </Button>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4 mt-4">
