@@ -1,6 +1,6 @@
 "use client";
 
-import { use } from "react";
+import { use, useEffect, useState } from "react";
 import { VerifyResult } from "./verify-result";
 import { verifyAccountAction } from "./actions";
 import { Card, CardContent } from "@/components/ui/card";
@@ -45,8 +45,17 @@ export function VerifyContent({ searchParams }: VerifyContentProps) {
       </Card>
     );
   }
+  const [verifyPromise, setVerifyPromise] = useState(
+    Promise.resolve<{ success: boolean }>({ success: false }),
+  );
+  useEffect(() => {
+    // Your code here
 
-  const verifyPromise = verifyAccountAction(token);
+    verifyAccountAction(token).then((result: any) => {
+      // window.alert(JSON.stringify(result));
+      return setVerifyPromise(Promise.resolve(result));
+    });
+  }, []);
 
   return <VerifyResult resultPromise={verifyPromise} />;
 }

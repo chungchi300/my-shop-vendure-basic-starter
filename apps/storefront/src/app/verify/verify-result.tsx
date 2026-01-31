@@ -16,7 +16,7 @@ interface VerifyResultProps {
 
 export function VerifyResult({ resultPromise }: VerifyResultProps) {
   const result = use(resultPromise);
-
+  console.log(resultPromise, result);
   const isSuccess = "success" in result;
 
   return (
